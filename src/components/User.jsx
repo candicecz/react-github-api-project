@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import API_KEY from './gitkey'
 
 class User extends React.Component {
     constructor() {
@@ -20,17 +21,29 @@ class User extends React.Component {
     When `render` gets called again, `this.state.user` exists and we get the user info display instead of "LOADING..."
     */
     componentDidMount() {
-        fetch(`https://api.github.com/users/${this.props.params.username}`)
-        .then(response => response.json())
-        .then(
-            user => {
-                // How can we use `this` inside a callback without binding it??
-                // Make sure you understand this fundamental difference with arrow functions!!!
-                this.setState({
-                    user: user
-                });
-            }
-        );
+      this.fetchData();
+    }
+
+// lets page reload with new user
+    componentDidUpdate(prevProps){
+      if(prevProps.params.username !== this.props.params.username){
+        this.fetchData();
+      }
+    }
+
+    fetchData = () => {
+      fetch(`https://api.github.com/users/${this.props.params.username}?access_token=${API_KEY}`)//import git key!!!
+      .then(response => response.json())
+      .then(
+          user => {
+              // How can we use `this` inside a callback without binding it??
+              // Make sure you understand this fundamental difference with arrow functions!!!
+              this.setState({
+                  user: user
+              });
+          }
+      );
+
     }
 
     /*
@@ -89,6 +102,7 @@ class User extends React.Component {
                         {stats.map(this.renderStat)}
                     </ul>
                 </div>
+                {this.props.children}
             </div>
         );
     }

@@ -13,7 +13,7 @@ class Search extends React.Component {
     constructor(props) {
         super(props);
 
-        // Why do we need to do this?? Make sure you understand!!!
+        // Why do we need to do this?? Make sure you understand!!! binding the function so you can use this later
         this._handleSubmit = this._handleSubmit.bind(this);
     }
     _handleSubmit(e) {
